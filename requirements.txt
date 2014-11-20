@@ -1,0 +1,3 @@
+unittest2py3k
+nose2
+pylint
