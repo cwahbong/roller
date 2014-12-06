@@ -3,7 +3,7 @@
 
 from nose2.tools import params
 
-from roller.shortcuts import d
+from roller.dice import d
 
 @params(
     (d(4), 2.5, {i + 1: 0.25 for i in range(4)}),
