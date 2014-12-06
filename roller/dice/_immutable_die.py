@@ -8,6 +8,9 @@ class ImmutableDie(Die):
 
     def __init__(self, distribution, expected_hint=None):
         def _normalized_dist_dict(dist_dict):
+            """ Make the sum of probability be 1 in a distribution by
+            multiplying a constant.
+            """
             total_weight = sum(dist_dict.values())
             return dict((k, v / total_weight) for k, v in dist_dict.items())
         super().__init__()

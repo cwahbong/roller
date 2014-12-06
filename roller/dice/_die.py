@@ -54,11 +54,15 @@ class Die:
         return not self.__eq__(other)
 
     @staticmethod
-    def _cmp_helper(ldie, rdie, op):
+    def _cmp_helper(ldie, rdie, optr):
+        """ Helper for implementing cmp functions.
+        Returns the probability that a binary operator returns true for a rolled
+        ldie and ride.
+        """
         prob = 0.0
         for l_res, l_prob in ldie.distribution():
             for r_res, r_prob in rdie.distribution():
-                if op(l_res, r_res):
+                if optr(l_res, r_res):
                     prob += l_prob * r_prob
         return prob
 
