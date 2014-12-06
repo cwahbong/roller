@@ -3,4 +3,4 @@ python:
   - "3.3"
   - "3.4"
 install: pip install -r requirements.txt
-script: nose2 && pylint --reports=no roller
+script: nose2 --verbose && pylint --reports=no roller
