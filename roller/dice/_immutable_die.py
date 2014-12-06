@@ -29,3 +29,21 @@ class ImmutableDie(Die):
 
     def results(self):
         return self._distribution.keys()
+
+def regular_die(sides):
+    """ Shortcut for getting a regular die.  For example, d(4) for a
+    d4, d(6) for a d6, and etc.
+    """
+    return ImmutableDie(
+        ((side, 1 / sides) for side in range(1, sides + 1)),
+        expected_hint=(sides + 1) / 2
+    )
+
+def const_die(const):
+    """ Shortcut for getting a const die.  For example, c(3) for a die that
+    always rolls 3.
+    """
+    return ImmutableDie(
+        ((const, 1), ),
+        expected_hint=const
+    )
