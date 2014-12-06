@@ -3,7 +3,7 @@
 
 from nose2.tools import params
 
-from roller.dice import d
+from roller.shortcuts import d
 
 @params(
     (d(4), 2.5, {i + 1: 0.25 for i in range(4)}),
@@ -14,5 +14,8 @@ from roller.dice import d
 def test_dice_attr(dice, expected, distribution):
     """ Test the attributes of a dice.
     """
-    assert dice.expected() == expected
-    assert dice.distribution() == distribution
+    assert dice.expected == expected
+    dice_dist = dict(dice.distribution())
+    assert set(dice_dist.keys()) == set(distribution.keys())
+    for key in dice_dist:
+        assert round(dice_dist[key], 15) == round(distribution[key], 15)
