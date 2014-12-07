@@ -122,7 +122,7 @@ with such.A("collection of dice tests") as it:
 
     @it.should("calculates binary probability correctly.")
     def binary_prob(case):
-        """
+        """ Test return value of probability().
         """
         import operator
         operators = (
