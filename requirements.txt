@@ -2,3 +2,4 @@ unittest2py3k
 nose2
 nose2-cov
 pylint
+python-coveralls

@@ -3,4 +3,7 @@ python:
   - "3.3"
   - "3.4"
 install: pip install --pre -r requirements.txt
-script: nose2 --verbose && pylint --reports=no roller
+script:
+  - nose2 --verbose
+  - pylint --reports=no roller
+after_success: coveralls
