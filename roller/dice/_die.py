@@ -1,10 +1,10 @@
 """ Class Die.
 """
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 import random
 
-class Die(ABC):
+class Die(metaclass=ABCMeta):
     """ A Die.
     """
 
