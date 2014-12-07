@@ -1,22 +1,22 @@
 """ Test module roller.dice
 """
 
-from nose2.tools import params, such
+from nose2.tools import such
 
-from roller.dice import const_die as c
-from roller.dice import regular_die as d
+def const_die(const):
+    """ Shortcut function for getting a const die without import.
+    """
+    import roller.dice
+    return roller.dice.const_die(const)
+
+def regular_die(const):
+    """ Shortcut function for getting a const die without import.
+    """
+    import roller.dice
+    return roller.dice.regular_die(const)
 
 with such.A("collection of dice tests") as it:
 
-    @it.should("has correct attributes")
-    @params(
-        (c(4), 4, {4: 1}),
-        (c(10000000000), 10000000000, {10000000000: 1}),
-        (d(4), 2.5, {i + 1: 0.25 for i in range(4)}),
-        (d(8), 4.5, {i + 1: 0.125 for i in range(8)}),
-        (d(10), 5.5, {i + 1: 0.1 for i in range(10)}),
-        (d(20), 10.5, {i + 1: 0.05 for i in range(20)}),
-    )
     def correct_attr(case, die, expected, distribution):
         """ Hard coded attributes tests.
         """
@@ -26,12 +26,30 @@ with such.A("collection of dice tests") as it:
         for key in die_dist:
             case.assertAlmostEqual(die_dist[key], distribution[key])
 
-    @it.should("has reasonable attributes.")
-    @params(
-        c(256),
-        d(512),
-        d(9483),
-    )
+    @it.should("has correct attributes (const die).")
+    def correct_attr_c(case):
+        """ Hard coded attributes tests for const die.
+        """
+        params = (
+            (4, 4, {4: 1}),
+            (10000000000, 10000000000, {10000000000: 1}),
+        )
+        for const, expected, distribution in params:
+            correct_attr(case, const_die(const), expected, distribution)
+
+    @it.should("has correct attributes (regular die).")
+    def correct_attr_d(case):
+        """ Hard coded attributes tests for regular die.
+        """
+        params = (
+            (4, 2.5, {i + 1: 0.25 for i in range(4)}),
+            (8, 4.5, {i + 1: 0.125 for i in range(8)}),
+            (10, 5.5, {i + 1: 0.1 for i in range(10)}),
+            (20, 10.5, {i + 1: 0.05 for i in range(20)}),
+        )
+        for sides, expected, distribution in params:
+            correct_attr(case, regular_die(sides), expected, distribution)
+
     def reasonable_attr(case, die):
         """ Calc expected value by distribution, and the sum of all probability
         in distribution should almost equal to 1.
@@ -41,5 +59,65 @@ with such.A("collection of dice tests") as it:
 
         prob_sum = sum(prob for res, prob in die.distribution())
         case.assertAlmostEqual(prob_sum, 1)
+
+    @it.should("has reasonable attributes (const die).")
+    def reasonable_attr_c(case):
+        """ resonable_attr() for const die
+        """
+        params = (
+            256,
+            512,
+            12345,
+        )
+        for const in params:
+            reasonable_attr(case, const_die(const))
+
+    @it.should("has resonable attributes (regular die).")
+    def resonable_attr_d(case):
+        """ resonable_attr() for regular die
+        """
+        params = (
+            512,
+            9483
+        )
+        for sides in params:
+            reasonable_attr(case, regular_die(sides))
+
+    @it.should("be comparable (==, !=)")
+    def comparable_eq_ne(case):
+        """ Test eq and ne operatos.
+        """
+        params = (
+            (const_die(1), regular_die(1), True),
+        )
+        for ldie, rdie, is_eq in params:
+            case.assertEqual(ldie == rdie, is_eq)
+            case.assertEqual(ldie != rdie, not is_eq)
+
+    def roll(case, die):
+        """ Rolls a die for 100 times.
+        """
+        for _ in range(100):
+            case.assertIn(die.roll(), die.results())
+
+    @it.should("rolls a resonable result (const die).")
+    def roll_c(case):
+        """ roll() for a const die.
+        """
+        params = (
+            1, 5
+        )
+        for const in params:
+            roll(case, const_die(const))
+
+    @it.should("rolls a resonable result (regular die).")
+    def roll_d(case):
+        """ roll() for a regular die.
+        """
+        params = (
+            1, 20, 256,
+        )
+        for sides in params:
+            roll(case, regular_die(sides))
 
 it.createTests(globals())
