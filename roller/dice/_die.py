@@ -1,9 +1,10 @@
 """ Class Die.
 """
 
+from abc import ABC, abstractmethod
 import random
 
-class Die:
+class Die(ABC):
     """ A Die.
     """
 
@@ -11,20 +12,20 @@ class Die:
         super().__init__()
 
     @property
+    @abstractmethod
     def expected(self):
         """ The expected value of the points it rolls.
         """
-        raise NotImplementedError()
 
+    @abstractmethod
     def prob(self, side):
         """ The occur probability of the specific side.
         """
-        raise NotImplementedError()
 
+    @abstractmethod
     def results(self):
         """ Get all possible occurrence.
         """
-        raise NotImplementedError()
 
     def distribution(self):
         """ Get the distribution of rolled result as a dictionary.
