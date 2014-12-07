@@ -120,4 +120,29 @@ with such.A("collection of dice tests") as it:
         for sides in params:
             roll(case, regular_die(sides))
 
+    @it.should("calculates binary probability correctly.")
+    def binary_prob(case):
+        """
+        """
+        import operator
+        operators = (
+            operator.lt,
+            operator.gt,
+            operator.le,
+            operator.ge,
+            operator.eq,
+            operator.ne,
+        )
+        params = (
+            (
+                regular_die(6), regular_die(6),
+                (5 / 12, 5 / 12, 7 / 12, 7 / 12, 1 / 6, 5 / 6)
+            ),
+        )
+        import roller.dice
+        for ldie, rdie, results in params:
+            for optr, result in zip(operators, results):
+                prob = roller.dice.probability(ldie, rdie, optr)
+                case.assertAlmostEqual(prob, result)
+
 it.createTests(globals())
